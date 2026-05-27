@@ -1,59 +1,81 @@
 # ============================================================
 #  MineLand — Aplicación Web Flask
-#  Página de inicio inspirada en la estética de Minecraft
-#  Autor  : MineLand Dev
-#  Python : 3.14.3
-#  Uso    : python app.py   (requiere: pip install Flask)
+#  Página de inicio inspirada en Minecraft
+#  Compatible con Render
 # ============================================================
 
 from flask import Flask, render_template
+import os
 
-# Inicializar la aplicación Flask
-# static_folder y template_folder usan las rutas por defecto,
-# pero se declaran explícitamente para mayor claridad.
+# Inicializar aplicación Flask
 app = Flask(
     __name__,
-    static_folder="static",       # Sirve CSS, JS e imágenes
-    template_folder="templates"   # Contiene index.html
+    static_folder="static",
+    template_folder="templates"
 )
 
-
 # ----------------------------------------------------------
-# Ruta principal — Página de inicio
+# Página principal
 # ----------------------------------------------------------
 @app.route("/")
 def index():
-    """Renderiza la página de inicio de MineLand."""
     return render_template("index.html")
 
 
 # ----------------------------------------------------------
-# Rutas de secciones (páginas futuras — placeholder 200 OK)
+# Rutas adicionales
 # ----------------------------------------------------------
 @app.route("/jugar")
 def jugar():
-    return "<h2 style='font-family:sans-serif;text-align:center;margin-top:10%'>🎮 Sección JUGAR — Próximamente</h2>"
+    return """
+    <h2 style='font-family:sans-serif;
+               text-align:center;
+               margin-top:10%'>
+        🎮 Sección JUGAR — Próximamente
+    </h2>
+    """
 
 
 @app.route("/noticias")
 def noticias():
-    return "<h2 style='font-family:sans-serif;text-align:center;margin-top:10%'>📰 Sección NOTICIAS — Próximamente</h2>"
+    return """
+    <h2 style='font-family:sans-serif;
+               text-align:center;
+               margin-top:10%'>
+        📰 Sección NOTICIAS — Próximamente
+    </h2>
+    """
 
 
 @app.route("/tienda")
 def tienda():
-    return "<h2 style='font-family:sans-serif;text-align:center;margin-top:10%'>🛒 Sección TIENDA — Próximamente</h2>"
+    return """
+    <h2 style='font-family:sans-serif;
+               text-align:center;
+               margin-top:10%'>
+        🛒 Sección TIENDA — Próximamente
+    </h2>
+    """
 
 
 @app.route("/comunidad")
 def comunidad():
-    return "<h2 style='font-family:sans-serif;text-align:center;margin-top:10%'>🌐 Sección COMUNIDAD — Próximamente</h2>"
+    return """
+    <h2 style='font-family:sans-serif;
+               text-align:center;
+               margin-top:10%'>
+        🌐 Sección COMUNIDAD — Próximamente
+    </h2>
+    """
 
 
 # ----------------------------------------------------------
-# Punto de entrada
+# Ejecutar aplicación (IMPORTANTE PARA RENDER)
 # ----------------------------------------------------------
 if __name__ == "__main__":
-    # debug=True activa el recargado automático durante el desarrollo
-    # Acceder en: http://127.0.0.1:5000
-    app.run(debug=True)
+
+    # Render asigna automáticamente el puerto
+    port = int(os.environ.get("PORT", 5000))
+
+    # host="0.0.0.0" permite acceso externo
+    app.run(host="0.0.0.0", port=port)
