@@ -1,274 +1,83 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MineLand — El Mejor Mundo de Bloques</title>
+```html id="g0v87r"
+{% extends 'base.html' %}
 
-  <!-- Google Fonts: Montserrat (interfaz) + Press Start 2P (acento retro pixel) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Press+Start+2P&display=swap" rel="stylesheet" />
+{% block content %}
 
-  <!-- Hoja de estilos principal -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-</head>
-<body>
+<!-- HERO -->
 
-  <!-- =====================================================
-       BARRA DE NAVEGACIÓN SUPERIOR
-  ====================================================== -->
-  <header class="topbar">
-    <div class="topbar__inner">
+<section class="hero">
 
-      <!-- Logo / Título -->
-      <a href="/" class="topbar__logo" aria-label="MineLand Inicio">
-        <span class="logo-pixel">Mine</span><span class="logo-green">Land</span>
-      </a>
+    <div class="hero-content">
 
-      <!-- Navegación principal -->
-      <nav class="topbar__nav" aria-label="Navegación principal">
-        <a href="/jugar"     class="nav-link">Jugar</a>
-        <a href="/noticias"  class="nav-link">Noticias</a>
-        <a href="/tienda"    class="nav-link">Tienda</a>
-        <a href="/comunidad" class="nav-link">Comunidad</a>
-      </nav>
+        <h2>
+            Bienvenido a MineLand Center
+        </h2>
 
-      <!-- Botones de cuenta -->
-      <div class="topbar__actions">
-        <a href="#" class="btn btn--outline">Iniciar Sesión</a>
-        <a href="#" class="btn btn--green">Obtener MineLand</a>
-      </div>
-
-    </div>
-  </header>
-
-
-  <!-- =====================================================
-       HERO — Sección principal con fondo de mundo
-  ====================================================== -->
-  <section class="hero" aria-label="Presentación MineLand">
-    <div class="hero__overlay"></div>
-
-    <div class="hero__content">
-      <h1 class="hero__title">
-        Bienvenido a<br />
-        <span class="hero__title--brand">MineLand</span>
-      </h1>
-      <p class="hero__subtitle">
-        Construye, explora y sobrevive en un mundo de bloques sin límites.
-        Tu aventura comienza aquí.
-      </p>
-      <div class="hero__cta">
-        <a href="/jugar" class="btn btn--green btn--lg">▶ Jugar Ahora</a>
-        <a href="/tienda" class="btn btn--outline btn--lg">Ver Ediciones</a>
-      </div>
-    </div>
-
-    <!-- Decoración pixel flotante -->
-    <div class="hero__deco hero__deco--1" aria-hidden="true"></div>
-    <div class="hero__deco hero__deco--2" aria-hidden="true"></div>
-  </section>
-
-
-  <!-- =====================================================
-       SECCIONES PRINCIPALES — Cuatro tarjetas de navegación
-  ====================================================== -->
-  <main class="sections" id="main-content">
-    <div class="sections__grid">
-
-      <!-- ── JUGAR ────────────────────────────────────── -->
-      <a href="/jugar" class="section-card section-card--play" aria-label="Ir a Jugar">
-        <div class="section-card__img-wrap">
-          <img
-            src="{{ url_for('static', filename='images/play_button.png') }}"
-            alt="Jugar a MineLand"
-            class="section-card__img"
-            loading="lazy"
-          />
-        </div>
-        <div class="section-card__body">
-          <h2 class="section-card__title">Jugar</h2>
-          <p class="section-card__desc">
-            Empieza tu aventura en modo Supervivencia o desata tu creatividad
-            en modo Creativo. El mundo es tuyo.
-          </p>
-          <span class="section-card__btn">Jugar Ahora →</span>
-        </div>
-      </a>
-
-      <!-- ── NOTICIAS ──────────────────────────────────── -->
-      <a href="/noticias" class="section-card section-card--news" aria-label="Ir a Noticias">
-        <div class="section-card__img-wrap">
-          <img
-            src="{{ url_for('static', filename='images/news_icon.png') }}"
-            alt="Noticias de MineLand"
-            class="section-card__img"
-            loading="lazy"
-          />
-        </div>
-        <div class="section-card__body">
-          <h2 class="section-card__title">Noticias</h2>
-          <p class="section-card__desc">
-            Mantente al día con las últimas actualizaciones, parches, eventos
-            y contenido nuevo del universo MineLand.
-          </p>
-          <span class="section-card__btn">Leer Noticias →</span>
-        </div>
-      </a>
-
-      <!-- ── TIENDA ────────────────────────────────────── -->
-      <a href="/tienda" class="section-card section-card--shop" aria-label="Ir a la Tienda">
-        <div class="section-card__img-wrap">
-          <img
-            src="{{ url_for('static', filename='images/shop_icon.png') }}"
-            alt="Tienda de MineLand"
-            class="section-card__img"
-            loading="lazy"
-          />
-        </div>
-        <div class="section-card__body">
-          <h2 class="section-card__title">Tienda</h2>
-          <p class="section-card__desc">
-            Adquiere skins exclusivos, mapas, paquetes de texturas y
-            complementos para personalizar tu experiencia.
-          </p>
-          <span class="section-card__btn">Visitar Tienda →</span>
-        </div>
-      </a>
-
-      <!-- ── COMUNIDAD ─────────────────────────────────── -->
-      <a href="/comunidad" class="section-card section-card--community" aria-label="Ir a Comunidad">
-        <div class="section-card__img-wrap">
-          <img
-            src="{{ url_for('static', filename='images/community_icon.png') }}"
-            alt="Comunidad de MineLand"
-            class="section-card__img"
-            loading="lazy"
-          />
-        </div>
-        <div class="section-card__body">
-          <h2 class="section-card__title">Comunidad</h2>
-          <p class="section-card__desc">
-            Únete a millones de jugadores, comparte tus creaciones, participa
-            en foros y encuentra servidores épicos.
-          </p>
-          <span class="section-card__btn">Unirse →</span>
-        </div>
-      </a>
-
-    </div><!-- /.sections__grid -->
-  </main>
-
-
-  <!-- =====================================================
-       BANNER SECUNDARIO — Llamada a la acción intermedia
-  ====================================================== -->
-  <section class="promo-banner" aria-label="Promoción destacada">
-    <div class="promo-banner__inner">
-      <div class="promo-banner__text">
-        <h2 class="promo-banner__title">¿Listo para construir mundos?</h2>
-        <p class="promo-banner__sub">
-          Disponible en PC, consola y móvil. ¡Más de 300 millones de jugadores
-          ya forman parte de MineLand!
+        <p>
+            Consolas, hardware gaming y tecnología extrema.
         </p>
-      </div>
-      <a href="/tienda" class="btn btn--green btn--lg">Conseguir MineLand</a>
+
+        <a href="#products" class="btn-primary">
+            Ver Productos
+        </a>
+
     </div>
-  </section>
 
+</section>
 
-  <!-- =====================================================
-       NOTICIAS RECIENTES — Vista previa
-  ====================================================== -->
-  <section class="news-preview" aria-label="Noticias recientes">
-    <div class="news-preview__inner">
-      <h2 class="section-heading">Últimas Noticias</h2>
+<!-- PRODUCTOS -->
 
-      <div class="news-grid">
+<section id="products">
 
-        <article class="news-card">
-          <div class="news-card__tag">Actualización</div>
-          <h3 class="news-card__title">Actualización 1.22: El Abismo Profundo</h3>
-          <p class="news-card__excerpt">
-            Nuevas criaturas acuáticas, biomas submarinos y estructuras antiguas
-            esperan a los exploradores más valientes.
-          </p>
-          <a href="/noticias" class="news-card__link">Leer más →</a>
-        </article>
+    <h2 class="section-title">
 
-        <article class="news-card">
-          <div class="news-card__tag">Evento</div>
-          <h3 class="news-card__title">Festival de Construcción: Verano 2025</h3>
-          <p class="news-card__excerpt">
-            Compite con miles de jugadores en el torneo de construcción más
-            grande de la historia de MineLand.
-          </p>
-          <a href="/noticias" class="news-card__link">Leer más →</a>
-        </article>
+        Productos Destacados
 
-        <article class="news-card">
-          <div class="news-card__tag">DLC</div>
-          <h3 class="news-card__title">Pack de Texturas: Edad de Piedra</h3>
-          <p class="news-card__excerpt">
-            Transforma tu mundo con más de 500 texturas HD inspiradas en
-            civilizaciones antiguas. Ya disponible.
-          </p>
-          <a href="/noticias" class="news-card__link">Leer más →</a>
-        </article>
+    </h2>
 
-      </div><!-- /.news-grid -->
+    <div class="product-grid">
+
+        {% for product in products %}
+
+        <div class="product-card">
+
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename=product.image_url
+                ) }}"
+                alt="{{ product.name }}"
+            >
+
+            <div class="product-info">
+
+                <h3>{{ product.name }}</h3>
+
+                <p class="price">
+
+                    ${{ product.price }}
+
+                </p>
+
+                <a
+                    href="{{ url_for(
+                        'product_detail',
+                        product_id=product.id
+                    ) }}"
+                    class="btn-secondary"
+                >
+                    Ver Producto
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
     </div>
-  </section>
 
+</section>
 
-  <!-- =====================================================
-       PIE DE PÁGINA
-  ====================================================== -->
-  <footer class="footer">
-    <div class="footer__inner">
-
-      <!-- Logo y descripción -->
-      <div class="footer__brand">
-        <span class="logo-pixel footer__logo-text">Mine</span><span class="logo-green footer__logo-text">Land</span>
-        <p class="footer__tagline">El mundo de bloques más grande del universo.</p>
-      </div>
-
-      <!-- Links de navegación -->
-      <nav class="footer__nav" aria-label="Navegación de pie de página">
-        <div class="footer__col">
-          <h4 class="footer__col-title">Juego</h4>
-          <a href="/jugar" class="footer__link">Jugar</a>
-          <a href="/tienda" class="footer__link">Ediciones</a>
-          <a href="#" class="footer__link">Descargar</a>
-        </div>
-        <div class="footer__col">
-          <h4 class="footer__col-title">Comunidad</h4>
-          <a href="/comunidad" class="footer__link">Foros</a>
-          <a href="/comunidad" class="footer__link">Servidores</a>
-          <a href="#" class="footer__link">Discord</a>
-        </div>
-        <div class="footer__col">
-          <h4 class="footer__col-title">Empresa</h4>
-          <a href="#" class="footer__link">Acerca de</a>
-          <a href="#" class="footer__link">Trabajos</a>
-          <a href="#" class="footer__link">Prensa</a>
-        </div>
-        <div class="footer__col">
-          <h4 class="footer__col-title">Legal</h4>
-          <a href="#" class="footer__link">Privacidad</a>
-          <a href="#" class="footer__link">Términos de Uso</a>
-          <a href="#" class="footer__link">Cookies</a>
-        </div>
-      </nav>
-
-    </div><!-- /.footer__inner -->
-
-    <div class="footer__bottom">
-      <p>© 2025 MineLand. Todos los derechos reservados.
-         Este sitio es un proyecto educativo independiente.</p>
-    </div>
-  </footer>
-
-</body>
-</html>
+{% endblock %}
+```
