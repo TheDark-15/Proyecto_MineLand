@@ -1,4 +1,3 @@
-```python id="l5t9az"
 """
 MineLand Center
 Tienda online gaming desarrollada con Flask.
