@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="cart-container">
+
+    <h2 class="section-title">
+        Carrito de Compras
+    </h2>
+
+    {% if cart %}
+
+    <div class="cart-grid">
+
+        {% for item in cart %}
+
+        <div class="cart-card">
+
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename=item.image_url
+                ) }}"
+                alt="{{ item.name }}"
+            >
+
+            <h3>{{ item.name }}</h3>
+
+            <p class="price">
+                ${{ item.price }}
+            </p>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <div class="cart-total">
+
+        <h2>
+            Total: ${{ total }}
+        </h2>
+
+    </div>
+
+    {% else %}
+
+    <p class="empty-cart">
+
+        El carrito está vacío.
+
+    </p>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}
