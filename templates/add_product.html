@@ -2,13 +2,11 @@
 
 {% block content %}
 
-<section class="add-product-container">
+<div class="form-container">
 
-    <h2>
-        Agregar Producto
-    </h2>
+    <h2>Agregar Producto</h2>
 
-    <form method="POST" class="add-product-form">
+    <form method="POST">
 
         <input
             type="text"
@@ -34,18 +32,16 @@
         <input
             type="text"
             name="image_url"
-            placeholder="ps5.jpg"
+            placeholder="ejemplo.jpg"
             required
         >
 
-        <button type="submit">
-
-            Guardar Producto
-
+        <button type="submit" class="btn-primary">
+            Guardar
         </button>
 
     </form>
 
-</section>
+</div>
 
 {% endblock %}
