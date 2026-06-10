@@ -3,3 +3,4 @@ Jinja2
 Werkzeug
 itsdangerous
 gunicorn
+Flask-SQLAlchemy
