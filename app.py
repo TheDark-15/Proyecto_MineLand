@@ -13,10 +13,12 @@ from flask import (
     session
 )
 
+from flask_sqlalchemy import SQLAlchemy
+
 import os
 
 # =====================================================
-# Inicialización Flask
+# INICIALIZACIÓN FLASK
 # =====================================================
 
 app = Flask(__name__)
@@ -24,51 +26,95 @@ app = Flask(__name__)
 app.secret_key = "mineland_secret_key"
 
 # =====================================================
-# Base de datos temporal
+# SQLITE DATABASE
 # =====================================================
 
-products = [
-    {
-        "id": 1,
-        "name": "PlayStation 5",
-        "price": 499.99,
-        "description": (
-            "Consola de nueva generación "
-            "de Sony con SSD ultrarrápido."
-        ),
-        "image_url": "images/ps5.jpg"
-    },
-    {
-        "id": 2,
-        "name": "Nintendo Switch 2",
-        "price": 449.99,
-        "description": (
-            "Consola híbrida moderna "
-            "con nuevas funciones online."
-        ),
-        "image_url": "images/switch2.jpg"
-    },
-    {
-        "id": 3,
-        "name": "Xbox Series X",
-        "price": 499.99,
-        "description": (
-            "Potencia extrema gaming "
-            "con resolución 4K."
-        ),
-        "image_url": "images/xbox.jpg"
-    },
-    {
-        "id": 4,
-        "name": "PC Gamer RGB",
-        "price": 1299.99,
-        "description": (
-            "Computadora gamer premium "
-            "con iluminación RGB."
-        ),
-        "image_url": "images/pcgamer.jpg"
-    }
-]
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    'sqlite:///database.db'
+)
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+# =====================================================
+# MODELO PRODUCTO
+# =====================================================
+
+class Product(db.Model):
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    name = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    price = db.Column(
+        db.Float,
+        nullable=False
+    )
+
+    description = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    image_url = db.Column(
+        db.String(200),
+        nullable=False
+    )
+
+# =====================================================
+# CREAR BASE DE DATOS
+# =====================================================
+
+with app.app_context():
+
+    db.create_all()
+
+    if Product.query.count() == 0:
+
+        sample_products = [
+
+            Product(
+                name="PlayStation 5",
+                price=499.99,
+                description=(
+                    "Consola de nueva generación "
+                    "de Sony con SSD ultrarrápido."
+                ),
+                image_url="images/ps5.jpg"
+            ),
+
+            Product(
+                name="Nintendo Switch 2",
+                price=449.99,
+                description=(
+                    "Consola híbrida moderna "
+                    "con nuevas funciones online."
+                ),
+                image_url="images/switch2.jpg"
+            ),
+
+            Product(
+                name="Xbox Series X",
+                price=499.99,
+                description=(
+                    "Potencia extrema gaming "
+                    "con resolución 4K."
+                ),
+                image_url="images/xbox.jpg"
+            )
+
+        ]
+
+        db.session.add_all(sample_products)
+
+        db.session.commit()
 
 # =====================================================
 # USUARIO ADMIN
@@ -86,18 +132,19 @@ def home():
 
     search = request.args.get('search')
 
-    filtered_products = products
-
     if search:
 
-        filtered_products = [
-            product for product in products
-            if search.lower() in product["name"].lower()
-        ]
+        products = Product.query.filter(
+            Product.name.contains(search)
+        ).all()
+
+    else:
+
+        products = Product.query.all()
 
     return render_template(
         'index.html',
-        products=filtered_products,
+        products=products,
         page_title='Inicio'
     )
 
@@ -108,13 +155,7 @@ def home():
 @app.route('/product/<int:product_id>')
 def product_detail(product_id):
 
-    product = next(
-        (
-            item for item in products
-            if item["id"] == product_id
-        ),
-        None
-    )
+    product = Product.query.get(product_id)
 
     if product is None:
         abort(404)
@@ -122,7 +163,7 @@ def product_detail(product_id):
     return render_template(
         'product_detail.html',
         product=product,
-        page_title=product["name"]
+        page_title=product.name
     )
 
 # =====================================================
@@ -208,6 +249,8 @@ def dashboard():
             url_for('login')
         )
 
+    products = Product.query.all()
+
     return render_template(
         'dashboard.html',
         products=products,
@@ -232,27 +275,27 @@ def add_product():
 
     if request.method == 'POST':
 
-        new_product = {
+        new_product = Product(
 
-            "id": len(products) + 1,
+            name=request.form.get('name'),
 
-            "name": request.form.get('name'),
-
-            "price": float(
+            price=float(
                 request.form.get('price')
             ),
 
-            "description": request.form.get(
+            description=request.form.get(
                 'description'
             ),
 
-            "image_url": (
+            image_url=(
                 f"images/"
                 f"{request.form.get('image_url')}"
             )
-        }
+        )
 
-        products.append(new_product)
+        db.session.add(new_product)
+
+        db.session.commit()
 
         return redirect(
             url_for('dashboard')
@@ -279,38 +322,31 @@ def edit_product(product_id):
             url_for('login')
         )
 
-    product = next(
-        (
-            item for item in products
-            if item["id"] == product_id
-        ),
-        None
-    )
+    product = Product.query.get(product_id)
 
     if product is None:
         abort(404)
 
     if request.method == 'POST':
 
-        product['name'] = request.form.get(
+        product.name = request.form.get(
             'name'
         )
 
-        product['price'] = float(
+        product.price = float(
             request.form.get('price')
         )
 
-        product['description'] = request.form.get(
+        product.description = request.form.get(
             'description'
         )
 
-        image_url = request.form.get(
-            'image_url'
+        product.image_url = (
+            f"images/"
+            f"{request.form.get('image_url')}"
         )
 
-        product['image_url'] = (
-            f"images/{image_url}"
-        )
+        db.session.commit()
 
         return redirect(
             url_for('dashboard')
@@ -335,18 +371,14 @@ def delete_product(product_id):
             url_for('login')
         )
 
-    product = next(
-        (
-            item for item in products
-            if item["id"] == product_id
-        ),
-        None
-    )
+    product = Product.query.get(product_id)
 
     if product is None:
         abort(404)
 
-    products.remove(product)
+    db.session.delete(product)
+
+    db.session.commit()
 
     return redirect(
         url_for('dashboard')
@@ -359,13 +391,7 @@ def delete_product(product_id):
 @app.route('/add_to_cart/<int:product_id>')
 def add_to_cart(product_id):
 
-    product = next(
-        (
-            item for item in products
-            if item["id"] == product_id
-        ),
-        None
-    )
+    product = Product.query.get(product_id)
 
     if product is None:
         abort(404)
@@ -374,7 +400,14 @@ def add_to_cart(product_id):
 
         session['cart'] = []
 
-    session['cart'].append(product)
+    session['cart'].append({
+
+        "id": product.id,
+        "name": product.name,
+        "price": product.price,
+        "image_url": product.image_url
+
+    })
 
     session.modified = True
 
@@ -456,5 +489,12 @@ def page_not_found(error):
 # =====================================================
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+
+    port = int(
+        os.environ.get("PORT", 5000)
+    )
+
+    app.run(
+        host='0.0.0.0',
+        port=port
+    )
