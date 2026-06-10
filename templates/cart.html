@@ -2,58 +2,64 @@
 
 {% block content %}
 
-<section class="cart-container">
+<h2 class="section-title">
+    Carrito de Compras
+</h2>
 
-    <h2 class="section-title">
-        Carrito de Compras
-    </h2>
+{% if cart %}
 
-    {% if cart %}
+<div class="cart-container">
 
-    <div class="cart-grid">
+    {% for item in cart %}
 
-        {% for item in cart %}
+    <div class="cart-item">
 
-        <div class="cart-card">
+        <img
+            src="{{ url_for(
+                'static',
+                filename=item.image_url
+            ) }}"
+        >
 
-            <img
-                src="{{ url_for(
-                    'static',
-                    filename=item.image_url
-                ) }}"
-                alt="{{ item.name }}"
-            >
+        <div>
 
             <h3>{{ item.name }}</h3>
 
-            <p class="price">
-                ${{ item.price }}
-            </p>
+            <p>${{ item.price }}</p>
+
+            <a
+                href="{{ url_for(
+                    'remove_from_cart',
+                    index=loop.index0
+                ) }}"
+                class="btn-danger"
+            >
+                Eliminar
+            </a>
 
         </div>
 
-        {% endfor %}
-
     </div>
 
-    <div class="cart-total">
+    {% endfor %}
 
-        <h2>
-            Total: ${{ total }}
-        </h2>
+    <h3>Total: ${{ total }}</h3>
 
-    </div>
+    <a
+        href="{{ url_for('clear_cart') }}"
+        class="btn-danger"
+    >
+        Vaciar Carrito
+    </a>
 
-    {% else %}
+</div>
 
-    <p class="empty-cart">
+{% else %}
 
-        El carrito está vacío.
+<p>
+    El carrito está vacío.
+</p>
 
-    </p>
-
-    {% endif %}
-
-</section>
+{% endif %}
 
 {% endblock %}
