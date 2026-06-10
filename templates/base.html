@@ -3,6 +3,10 @@
 
 <head>
 
+    <!-- =====================================================
+    META TAGS
+    ===================================================== -->
+
     <meta charset="UTF-8">
 
     <meta
@@ -10,51 +14,140 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <!-- =====================================================
+    TITLE
+    ===================================================== -->
+
     <title>
+
         MineLand Center - {{ page_title }}
+
     </title>
+
+    <!-- =====================================================
+    CSS
+    ===================================================== -->
 
     <link
         rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}"
+        href="{{ url_for(
+            'static',
+            filename='style.css'
+        ) }}"
     >
 
 </head>
 
 <body>
 
-    <!-- HEADER -->
+    <!-- =====================================================
+    HEADER
+    ===================================================== -->
 
     <header class="main-header">
 
+        <!-- LOGO -->
+
         <div class="logo">
 
-            <h1>MineLand Center</h1>
+            <h1>
+
+                MineLand Center
+
+            </h1>
 
         </div>
 
-        <!-- NAVBAR -->
+        <!-- =====================================================
+        NAVBAR
+        ===================================================== -->
 
         <nav class="navbar">
 
             <ul class="nav-links">
 
+                <!-- INICIO -->
+
                 <li>
+
                     <a href="{{ url_for('home') }}">
+
                         Inicio
+
                     </a>
+
                 </li>
 
+                <!-- NOSOTROS -->
+
                 <li>
+
                     <a href="{{ url_for('about') }}">
+
                         Nosotros
+
                     </a>
+
                 </li>
 
+                <!-- CONTACTO -->
+
                 <li>
+
                     <a href="{{ url_for('contact') }}">
+
                         Contacto
+
                     </a>
+
+                </li>
+
+                <!-- CARRITO -->
+
+                <li>
+
+                    <a href="{{ url_for('cart_page') }}">
+
+                        Carrito
+
+                    </a>
+
+                </li>
+
+                <!-- LOGIN -->
+
+                <li>
+
+                    <a href="{{ url_for('login') }}">
+
+                        Login
+
+                    </a>
+
+                </li>
+
+                <!-- DASHBOARD -->
+
+                <li>
+
+                    <a href="{{ url_for('dashboard') }}">
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+                <!-- LOGOUT -->
+
+                <li>
+
+                    <a href="{{ url_for('logout') }}">
+
+                        Logout
+
+                    </a>
+
                 </li>
 
             </ul>
@@ -63,7 +156,37 @@
 
     </header>
 
-    <!-- CONTENIDO -->
+    <!-- =====================================================
+    SEARCH BAR
+    ===================================================== -->
+
+    <section class="search-section">
+
+        <form
+            action="{{ url_for('home') }}"
+            method="GET"
+            class="search-form"
+        >
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Buscar productos..."
+            >
+
+            <button type="submit">
+
+                Buscar
+
+            </button>
+
+        </form>
+
+    </section>
+
+    <!-- =====================================================
+    MAIN CONTENT
+    ===================================================== -->
 
     <main class="container">
 
@@ -72,15 +195,26 @@
 
     </main>
 
-    <!-- FOOTER -->
+    <!-- =====================================================
+    FOOTER
+    ===================================================== -->
 
     <footer class="footer">
 
         <p>
+
             © 2026 MineLand Center
+
+        </p>
+
+        <p>
+
+            Plataforma gaming desarrollada con Flask
+
         </p>
 
     </footer>
 
 </body>
+
 </html>
