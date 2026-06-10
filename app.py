@@ -24,7 +24,7 @@ app = Flask(__name__)
 app.secret_key = "mineland_secret_key"
 
 # =====================================================
-# Base de datos temporal de productos
+# Base de datos temporal
 # =====================================================
 
 products = [
@@ -71,20 +71,14 @@ products = [
 ]
 
 # =====================================================
-# CARRITO
-# =====================================================
-
-cart = []
-
-# =====================================================
-# LOGIN
+# USUARIO ADMIN
 # =====================================================
 
 USERNAME = "admin"
 PASSWORD = "1234"
 
 # =====================================================
-# Página principal
+# HOME
 # =====================================================
 
 @app.route('/')
@@ -108,7 +102,7 @@ def home():
     )
 
 # =====================================================
-# Detalle producto
+# DETALLE PRODUCTO
 # =====================================================
 
 @app.route('/product/<int:product_id>')
@@ -132,7 +126,7 @@ def product_detail(product_id):
     )
 
 # =====================================================
-# Nosotros
+# NOSOTROS
 # =====================================================
 
 @app.route('/about')
@@ -144,7 +138,7 @@ def about():
     )
 
 # =====================================================
-# Contacto
+# CONTACTO
 # =====================================================
 
 @app.route('/contact')
@@ -176,9 +170,13 @@ def login():
 
             session['user'] = username
 
-            return redirect(url_for('dashboard'))
+            return redirect(
+                url_for('dashboard')
+            )
 
-        error = "Usuario o contraseña incorrectos"
+        error = (
+            "Usuario o contraseña incorrectos"
+        )
 
     return render_template(
         'login.html',
@@ -205,7 +203,10 @@ def logout():
 def dashboard():
 
     if 'user' not in session:
-        return redirect(url_for('login'))
+
+        return redirect(
+            url_for('login')
+        )
 
     return render_template(
         'dashboard.html',
@@ -224,19 +225,27 @@ def dashboard():
 def add_product():
 
     if 'user' not in session:
-        return redirect(url_for('login'))
+
+        return redirect(
+            url_for('login')
+        )
 
     if request.method == 'POST':
 
         new_product = {
+
             "id": len(products) + 1,
+
             "name": request.form.get('name'),
+
             "price": float(
                 request.form.get('price')
             ),
+
             "description": request.form.get(
                 'description'
             ),
+
             "image_url": (
                 f"images/"
                 f"{request.form.get('image_url')}"
@@ -245,7 +254,9 @@ def add_product():
 
         products.append(new_product)
 
-        return redirect(url_for('dashboard'))
+        return redirect(
+            url_for('dashboard')
+        )
 
     return render_template(
         'add_product.html',
@@ -263,7 +274,10 @@ def add_product():
 def edit_product(product_id):
 
     if 'user' not in session:
-        return redirect(url_for('login'))
+
+        return redirect(
+            url_for('login')
+        )
 
     product = next(
         (
@@ -316,7 +330,10 @@ def edit_product(product_id):
 def delete_product(product_id):
 
     if 'user' not in session:
-        return redirect(url_for('login'))
+
+        return redirect(
+            url_for('login')
+        )
 
     product = next(
         (
@@ -331,10 +348,12 @@ def delete_product(product_id):
 
     products.remove(product)
 
-    return redirect(url_for('dashboard'))
+    return redirect(
+        url_for('dashboard')
+    )
 
 # =====================================================
-# CARRITO
+# AGREGAR AL CARRITO
 # =====================================================
 
 @app.route('/add_to_cart/<int:product_id>')
@@ -351,15 +370,30 @@ def add_to_cart(product_id):
     if product is None:
         abort(404)
 
-    cart.append(product)
+    if 'cart' not in session:
 
-    return redirect(url_for('cart_page'))
+        session['cart'] = []
+
+    session['cart'].append(product)
+
+    session.modified = True
+
+    return redirect(
+        url_for('cart_page')
+    )
+
+# =====================================================
+# VER CARRITO
+# =====================================================
 
 @app.route('/cart')
 def cart_page():
 
+    cart = session.get('cart', [])
+
     total = sum(
-        item['price'] for item in cart
+        item['price']
+        for item in cart
     )
 
     return render_template(
@@ -367,6 +401,42 @@ def cart_page():
         cart=cart,
         total=total,
         page_title='Carrito'
+    )
+
+# =====================================================
+# ELIMINAR DEL CARRITO
+# =====================================================
+
+@app.route('/remove_from_cart/<int:index>')
+def remove_from_cart(index):
+
+    cart = session.get('cart', [])
+
+    if 0 <= index < len(cart):
+
+        cart.pop(index)
+
+    session['cart'] = cart
+
+    session.modified = True
+
+    return redirect(
+        url_for('cart_page')
+    )
+
+# =====================================================
+# VACIAR CARRITO
+# =====================================================
+
+@app.route('/clear_cart')
+def clear_cart():
+
+    session['cart'] = []
+
+    session.modified = True
+
+    return redirect(
+        url_for('cart_page')
     )
 
 # =====================================================
