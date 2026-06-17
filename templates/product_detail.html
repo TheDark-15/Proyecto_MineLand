@@ -18,7 +18,11 @@
 
     <div class="product-detail-info">
 
-        <h2>{{ product.name }}</h2>
+        <h2>
+
+            {{ product.name }}
+
+        </h2>
 
         <p class="detail-price">
 
@@ -32,11 +36,17 @@
 
         </p>
 
-        <button class="btn-cart">
+        <a
+            href="{{ url_for(
+                'add_to_cart',
+                product_id=product.id
+            ) }}"
+            class="btn-cart"
+        >
 
             Agregar al carrito
 
-        </button>
+        </a>
 
     </div>
 
