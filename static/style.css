@@ -1,16 +1,8 @@
-/* =====================================================
-RESET
-===================================================== */
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
-/* =====================================================
-BODY
-===================================================== */
 
 body {
     background-color: #0d0d0d;
@@ -18,10 +10,6 @@ body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
 }
-
-/* =====================================================
-LINKS
-===================================================== */
 
 a {
     text-decoration: none;
@@ -32,10 +20,6 @@ a:hover {
     opacity: 0.8;
 }
 
-/* =====================================================
-HEADER
-===================================================== */
-
 .main-header {
     background-color: #111111;
     padding: 20px;
@@ -45,10 +29,6 @@ HEADER
     z-index: 1000;
 }
 
-/* =====================================================
-LOGO
-===================================================== */
-
 .logo h1 {
     text-align: center;
     color: #00d9ff;
@@ -56,17 +36,17 @@ LOGO
     margin-bottom: 15px;
 }
 
-/* =====================================================
-NAVBAR
-===================================================== */
-
 .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 10px;
+    width: 100%;
 }
 
-.nav-links {
+.left-links,
+.right-links {
     display: flex;
-    justify-content: center;
     align-items: center;
     gap: 20px;
     list-style: none;
@@ -84,10 +64,6 @@ NAVBAR
     background-color: #00d9ff;
     color: black;
 }
-
-/* =====================================================
-SEARCH BAR
-===================================================== */
 
 .search-section {
     width: 90%;
@@ -119,35 +95,24 @@ SEARCH BAR
     font-weight: bold;
 }
 
-/* =====================================================
-CONTAINER
-===================================================== */
-
 .container {
     width: 90%;
     max-width: 1200px;
     margin: auto;
 }
 
-/* =====================================================
-HERO
-===================================================== */
-
 .hero {
     padding: 120px 20px;
     text-align: center;
-
     background:
         linear-gradient(
             rgba(0, 0, 0, 0.55),
             rgba(0, 0, 0, 0.55)
         ),
         url("images/setbuild.jpg");
-
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-
     border-radius: 15px;
     margin-top: 30px;
 }
@@ -163,10 +128,6 @@ HERO
     color: #cccccc;
 }
 
-/* =====================================================
-SECTION TITLES
-===================================================== */
-
 .section-title {
     text-align: center;
     margin-top: 60px;
@@ -174,10 +135,6 @@ SECTION TITLES
     color: #00d9ff;
     font-size: 2rem;
 }
-
-/* =====================================================
-BUTTONS
-===================================================== */
 
 .btn-primary,
 .btn-secondary,
@@ -193,36 +150,26 @@ BUTTONS
     cursor: pointer;
 }
 
-/* PRIMARY */
-
 .btn-primary {
     background-color: #00d9ff;
     color: black;
 }
-
-/* SECONDARY */
 
 .btn-secondary {
     background-color: #7c3aed;
     color: white;
 }
 
-/* CART */
-
 .btn-cart {
     background-color: #00ff99;
     color: black;
 }
-
-/* REMOVE */
 
 .remove-btn,
 .btn-danger {
     background-color: #ff3b3b;
     color: white;
 }
-
-/* HOVER */
 
 .btn-primary:hover,
 .btn-secondary:hover,
@@ -232,24 +179,12 @@ BUTTONS
     transform: scale(1.05);
 }
 
-/* =====================================================
-PRODUCT GRID
-===================================================== */
-
 .product-grid {
     display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit, minmax(250px, 1fr));
-
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 30px;
-
     margin-top: 40px;
 }
-
-/* =====================================================
-PRODUCT CARD
-===================================================== */
 
 .product-card {
     background-color: #1a1a1a;
@@ -265,15 +200,11 @@ PRODUCT CARD
     box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
 }
 
-/* PRODUCT IMAGE */
-
 .product-card img {
     width: 100%;
     height: 250px;
     object-fit: cover;
 }
-
-/* PRODUCT INFO */
 
 .product-info {
     padding: 20px;
@@ -283,18 +214,12 @@ PRODUCT CARD
     margin-bottom: 10px;
 }
 
-/* PRICE */
-
 .price {
     color: #00ff99;
     margin: 15px 0;
     font-size: 1.3rem;
     font-weight: bold;
 }
-
-/* =====================================================
-PRODUCT DETAIL
-===================================================== */
 
 .product-detail {
     display: flex;
@@ -321,24 +246,16 @@ PRODUCT DETAIL
     font-size: 2.5rem;
 }
 
-/* DETAIL PRICE */
-
 .detail-price {
     color: #00ff99;
     font-size: 2rem;
     margin: 20px 0;
 }
 
-/* DESCRIPTION */
-
 .detail-description {
     margin-bottom: 20px;
     color: #cccccc;
 }
-
-/* =====================================================
-FORMS
-===================================================== */
 
 .add-product-container,
 .login-container,
@@ -396,10 +313,6 @@ FORMS
     cursor: pointer;
 }
 
-/* =====================================================
-DASHBOARD
-===================================================== */
-
 .dashboard-header {
     display: flex;
     justify-content: space-between;
@@ -431,10 +344,6 @@ DASHBOARD
     background-color: #1a1a1a;
 }
 
-/* =====================================================
-CART
-===================================================== */
-
 .cart-container {
     margin-top: 50px;
 }
@@ -444,7 +353,6 @@ CART
     padding: 20px;
     border-radius: 12px;
     margin-bottom: 20px;
-
     display: flex;
     align-items: center;
     gap: 20px;
@@ -455,10 +363,6 @@ CART
     border-radius: 12px;
 }
 
-/* =====================================================
-ERROR
-===================================================== */
-
 .error {
     background-color: #ff3b3b;
     padding: 15px;
@@ -466,10 +370,6 @@ ERROR
     text-align: center;
     margin-bottom: 20px;
 }
-
-/* =====================================================
-FOOTER
-===================================================== */
 
 .footer {
     background-color: #111111;
@@ -483,22 +383,19 @@ FOOTER
     margin-top: 10px;
 }
 
-/* =====================================================
-SIMPLE PAGE
-===================================================== */
-
 .simple-page {
     text-align: center;
     padding: 80px 20px;
 }
 
-/* =====================================================
-RESPONSIVE
-===================================================== */
-
 @media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+    }
 
-    .nav-links {
+    .left-links,
+    .right-links {
         flex-direction: column;
     }
 
@@ -522,5 +419,4 @@ RESPONSIVE
         flex-direction: column;
         text-align: center;
     }
-
 }
