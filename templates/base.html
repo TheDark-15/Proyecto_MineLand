@@ -2,11 +2,6 @@
 <html lang="es">
 
 <head>
-
-    <!-- =====================================================
-    META TAGS
-    ===================================================== -->
-
     <meta charset="UTF-8">
 
     <meta
@@ -14,156 +9,75 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <!-- =====================================================
-    TITLE
-    ===================================================== -->
-
     <title>
-
         MineLand Center - {{ page_title }}
-
     </title>
-
-    <!-- =====================================================
-    CSS
-    ===================================================== -->
 
     <link
         rel="stylesheet"
-        href="{{ url_for(
-            'static',
-            filename='style.css'
-        ) }}"
+        href="{{ url_for('static', filename='style.css') }}"
     >
 
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    >
 </head>
 
 <body>
 
-    <!-- =====================================================
-    HEADER
-    ===================================================== -->
-
     <header class="main-header">
 
-        <!-- LOGO -->
-
         <div class="logo">
-
-            <h1>
-
-                MineLand Center
-
-            </h1>
-
+            <h1>MineLand Center</h1>
         </div>
 
-        <!-- =====================================================
-        NAVBAR
-        ===================================================== -->
+        <nav class="navbar">
 
-       <nav class="navbar">
-
-    <ul class="nav-links left-links">
-
-        <li><a href="{{ url_for('home') }}">Inicio</a></li>
-        <li><a href="{{ url_for('about') }}">Nosotros</a></li>
-        <li><a href="{{ url_for('contact') }}">Contacto</a></li>
-        <li><a href="{{ url_for('cart_page') }}">Carrito</a></li>
-
-    </ul>
-
-    <ul class="nav-links right-links">
-
-        <li><a href="{{ url_for('login') }}">Login</a></li>
-        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-        <li><a href="{{ url_for('logout') }}">Logout</a></li>
-
-    </ul>
-
-</nav>
-
-                <!-- NOSOTROS -->
-
+            <ul class="nav-links left-links">
                 <li>
-
-                    <a href="{{ url_for('about') }}">
-
-                        Nosotros
-
-                    </a>
-
+                    <a href="{{ url_for('home') }}">Inicio</a>
                 </li>
 
-                <!-- CONTACTO -->
-
                 <li>
-
-                    <a href="{{ url_for('contact') }}">
-
-                        Contacto
-
-                    </a>
-
+                    <a href="{{ url_for('about') }}">Nosotros</a>
                 </li>
 
-                <!-- CARRITO -->
-
                 <li>
-
-                    <a href="{{ url_for('cart_page') }}">
-
-                        Carrito
-
-                    </a>
-
+                    <a href="{{ url_for('contact') }}">Contacto</a>
                 </li>
 
-                <!-- LOGIN -->
-
                 <li>
+                    <a href="{{ url_for('cart_page') }}">Carrito</a>
+                </li>
+            </ul>
 
+            <ul class="nav-links right-links">
+                <li>
                     <a href="{{ url_for('login') }}">
-
+                        <i class="fa-solid fa-right-to-bracket"></i>
                         Login
-
                     </a>
-
                 </li>
 
-                <!-- DASHBOARD -->
-
                 <li>
-
                     <a href="{{ url_for('dashboard') }}">
-
+                        <i class="fa-solid fa-chart-line"></i>
                         Dashboard
-
                     </a>
-
                 </li>
-
-                <!-- LOGOUT -->
 
                 <li>
-
                     <a href="{{ url_for('logout') }}">
-
+                        <i class="fa-solid fa-right-from-bracket"></i>
                         Logout
-
                     </a>
-
                 </li>
-
             </ul>
 
         </nav>
 
     </header>
-
-    <!-- =====================================================
-    SEARCH BAR
-    ===================================================== -->
 
     <section class="search-section">
 
@@ -172,7 +86,6 @@
             method="GET"
             class="search-form"
         >
-
             <input
                 type="text"
                 name="search"
@@ -180,46 +93,21 @@
             >
 
             <button type="submit">
-
                 Buscar
-
             </button>
-
         </form>
 
     </section>
 
-    <!-- =====================================================
-    MAIN CONTENT
-    ===================================================== -->
-
     <main class="container">
-
         {% block content %}
         {% endblock %}
-
     </main>
 
-    <!-- =====================================================
-    FOOTER
-    ===================================================== -->
-
     <footer class="footer">
-
-        <p>
-
-            © 2026 MineLand Center
-
-        </p>
-
-        <p>
-
-            Plataforma gaming desarrollada con Flask
-
-        </p>
-
+        <p>© 2026 MineLand Center</p>
+        <p>Plataforma gaming desarrollada con Flask</p>
     </footer>
 
 </body>
-
 </html>
