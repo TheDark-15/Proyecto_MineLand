@@ -82,7 +82,7 @@ with app.app_context():
 
             Product(
                 name="PlayStation 5",
-                price=499.99,
+                price=2599.99,
                 description=(
                     "Consola de nueva generación "
                     "de Sony con SSD ultrarrápido."
@@ -92,7 +92,7 @@ with app.app_context():
 
             Product(
                 name="Nintendo Switch 2",
-                price=449.99,
+                price=2459.99,
                 description=(
                     "Consola híbrida moderna "
                     "con nuevas funciones online."
@@ -102,12 +102,22 @@ with app.app_context():
 
             Product(
                 name="Xbox Series X",
-                price=499.99,
+                price=2199.99,
                 description=(
                     "Potencia extrema gaming "
                     "con resolución 4K."
                 ),
                 image_url="images/xbox.jpg"
+            ),
+
+             Product(
+                name="PC Gamer Razer X",
+                price=2999.99,
+                description=(
+                    "Potente equipo gamer con 664 GB y 32 Ram"
+                    "con resolución 4K y tarjeta grafica incluida."
+                ),
+                image_url="images/pcgamer.jpg"
             )
 
         ]
