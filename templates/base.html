@@ -62,21 +62,26 @@
         NAVBAR
         ===================================================== -->
 
-        <nav class="navbar">
+       <nav class="navbar">
 
-            <ul class="nav-links">
+    <ul class="nav-links left-links">
 
-                <!-- INICIO -->
+        <li><a href="{{ url_for('home') }}">Inicio</a></li>
+        <li><a href="{{ url_for('about') }}">Nosotros</a></li>
+        <li><a href="{{ url_for('contact') }}">Contacto</a></li>
+        <li><a href="{{ url_for('cart_page') }}">Carrito</a></li>
 
-                <li>
+    </ul>
 
-                    <a href="{{ url_for('home') }}">
+    <ul class="nav-links right-links">
 
-                        Inicio
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
 
-                    </a>
+    </ul>
 
-                </li>
+</nav>
 
                 <!-- NOSOTROS -->
 
