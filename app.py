@@ -17,17 +17,9 @@ from flask_sqlalchemy import SQLAlchemy
 
 import os
 
-# =====================================================
-# INICIALIZACIÓN FLASK
-# =====================================================
-
 app = Flask(__name__)
 
 app.secret_key = "mineland_secret_key"
-
-# =====================================================
-# SQLITE DATABASE
-# =====================================================
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     'sqlite:///database.db'
@@ -36,10 +28,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-
-# =====================================================
-# MODELO PRODUCTO
-# =====================================================
 
 class Product(db.Model):
 
@@ -67,10 +55,6 @@ class Product(db.Model):
         db.String(200),
         nullable=False
     )
-
-# =====================================================
-# CREAR BASE DE DATOS
-# =====================================================
 
 with app.app_context():
 
@@ -126,16 +110,8 @@ with app.app_context():
 
         db.session.commit()
 
-# =====================================================
-# USUARIO ADMIN
-# =====================================================
-
 USERNAME = "admin"
 PASSWORD = "1234"
-
-# =====================================================
-# HOME
-# =====================================================
 
 @app.route('/')
 def home():
@@ -176,10 +152,6 @@ def product_detail(product_id):
         page_title=product.name
     )
 
-# =====================================================
-# NOSOTROS
-# =====================================================
-
 @app.route('/about')
 def about():
 
@@ -188,10 +160,6 @@ def about():
         page_title='Nosotros'
     )
 
-# =====================================================
-# CONTACTO
-# =====================================================
-
 @app.route('/contact')
 def contact():
 
@@ -199,10 +167,6 @@ def contact():
         'contact.html',
         page_title='Contacto'
     )
-
-# =====================================================
-# LOGIN
-# =====================================================
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -235,20 +199,12 @@ def login():
         page_title='Login'
     )
 
-# =====================================================
-# LOGOUT
-# =====================================================
-
 @app.route('/logout')
 def logout():
 
     session.pop('user', None)
 
     return redirect(url_for('home'))
-
-# =====================================================
-# DASHBOARD
-# =====================================================
 
 @app.route('/dashboard')
 def dashboard():
@@ -266,10 +222,6 @@ def dashboard():
         products=products,
         page_title='Dashboard'
     )
-
-# =====================================================
-# AGREGAR PRODUCTO
-# =====================================================
 
 @app.route(
     '/add_product',
@@ -315,10 +267,6 @@ def add_product():
         'add_product.html',
         page_title='Agregar Producto'
     )
-
-# =====================================================
-# EDITAR PRODUCTO
-# =====================================================
 
 @app.route(
     '/edit_product/<int:product_id>',
@@ -368,10 +316,6 @@ def edit_product(product_id):
         page_title='Editar Producto'
     )
 
-# =====================================================
-# ELIMINAR PRODUCTO
-# =====================================================
-
 @app.route('/delete_product/<int:product_id>')
 def delete_product(product_id):
 
@@ -393,10 +337,6 @@ def delete_product(product_id):
     return redirect(
         url_for('dashboard')
     )
-
-# =====================================================
-# AGREGAR AL CARRITO
-# =====================================================
 
 @app.route('/add_to_cart/<int:product_id>')
 def add_to_cart(product_id):
@@ -425,10 +365,6 @@ def add_to_cart(product_id):
         url_for('cart_page')
     )
 
-# =====================================================
-# VER CARRITO
-# =====================================================
-
 @app.route('/cart')
 def cart_page():
 
@@ -445,10 +381,6 @@ def cart_page():
         total=total,
         page_title='Carrito'
     )
-
-# =====================================================
-# ELIMINAR DEL CARRITO
-# =====================================================
 
 @app.route('/remove_from_cart/<int:index>')
 def remove_from_cart(index):
@@ -467,10 +399,6 @@ def remove_from_cart(index):
         url_for('cart_page')
     )
 
-# =====================================================
-# VACIAR CARRITO
-# =====================================================
-
 @app.route('/clear_cart')
 def clear_cart():
 
@@ -482,10 +410,6 @@ def clear_cart():
         url_for('cart_page')
     )
 
-# =====================================================
-# ERROR 404
-# =====================================================
-
 @app.errorhandler(404)
 def page_not_found(error):
 
@@ -493,10 +417,6 @@ def page_not_found(error):
         '404.html',
         page_title='No encontrado'
     ), 404
-
-# =====================================================
-# EJECUTAR FLASK
-# =====================================================
 
 if __name__ == '__main__':
 
