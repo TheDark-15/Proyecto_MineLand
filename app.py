@@ -403,7 +403,7 @@ def clear_cart():
     return redirect(url_for('cart_page'))
 
 
-@app.route('/checkout', methods=['POST'])
+@app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
 
     cart = session.get('cart', [])
@@ -411,42 +411,53 @@ def checkout():
     if len(cart) == 0:
         return redirect(url_for('cart_page', error="carrito_vacio"))
 
-    payment = request.form.get('payment')
+    total = sum(float(item['price']) for item in cart)
 
-    if payment != "123456":
-        return redirect(url_for('cart_page', error="pago"))
+    if request.method == "POST":
 
-    customer = Customer.query.first()
+        payment = request.form.get('payment')
 
-    if customer is None:
-        return redirect(url_for('cart_page', error="no_customer"))
+        if payment != "123456":
+            return redirect(url_for('cart_page', error="pago"))
 
-    for item in cart:
+        customer = Customer.query.first()
 
-        product = Product.query.get(item['id'])
+        if customer is None:
+            return redirect(url_for('cart_page', error="no_customer"))
 
-        if product is None:
-            return redirect(url_for('cart_page', error="producto_no_existe"))
+        for item in cart:
 
-        if product.stock <= 0:
-            return redirect(url_for('cart_page', error="sin_stock"))
+            product = Product.query.get(item['id'])
 
-        product.stock -= 1
+            if product is None:
+                return redirect(url_for('cart_page', error="producto_no_existe"))
 
-        purchase = Purchase(
-            customer_name=customer.name,
-            product_name=product.name,
-            price=product.price
-        )
+            if product.stock <= 0:
+                return redirect(url_for('cart_page', error="sin_stock"))
 
-        db.session.add(purchase)
+            product.stock -= 1
 
-    db.session.commit()
+            purchase = Purchase(
+                customer_name=customer.name,
+                product_name=product.name,
+                price=product.price
+            )
 
-    session['cart'] = []
-    session.modified = True
+            db.session.add(purchase)
 
-    return redirect(url_for('cart_page', success="1"))
+        db.session.commit()
+
+        session['cart'] = []
+        session.modified = True
+
+        return redirect(url_for('cart_page', success="1"))
+
+    return render_template(
+        "checkout.html",
+        cart=cart,
+        total=total,
+        page_title="Finalizar Compra"
+    )
 
 @app.errorhandler(404)
 def page_not_found(error):
