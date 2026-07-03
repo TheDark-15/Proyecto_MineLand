@@ -19,13 +19,17 @@
                 'static',
                 filename=item.image_url
             ) }}"
+            alt="{{ item.name }}"
         >
 
         <div>
 
             <h3>{{ item.name }}</h3>
 
-            <p>S/{{ item.price }}</p>
+            <p>
+                Precio:
+                <strong>S/{{ item.price }}</strong>
+            </p>
 
             <a
                 href="{{ url_for(
@@ -43,14 +47,29 @@
 
     {% endfor %}
 
-    <h3>Total: S/{{ total }}</h3>
+    <hr>
 
-    <a
-        href="{{ url_for('clear_cart') }}"
-        class="btn-danger"
-    >
-        Vaciar Carrito
-    </a>
+    <h3>
+        Total: S/{{ total }}
+    </h3>
+
+    <div style="margin-top:20px;">
+
+        <a
+            href="{{ url_for('payment') }}"
+            class="btn-primary"
+        >
+            Finalizar Compra
+        </a>
+
+        <a
+            href="{{ url_for('clear_cart') }}"
+            class="btn-danger"
+        >
+            Vaciar Carrito
+        </a>
+
+    </div>
 
 </div>
 
@@ -59,6 +78,13 @@
 <p>
     El carrito está vacío.
 </p>
+
+<a
+    href="{{ url_for('home') }}"
+    class="btn-primary"
+>
+    Ir a la tienda
+</a>
 
 {% endif %}
 
