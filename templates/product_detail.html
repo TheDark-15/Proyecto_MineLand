@@ -7,10 +7,7 @@
     <div class="product-detail-image">
 
         <img
-            src="{{ url_for(
-                'static',
-                filename=product.image_url
-            ) }}"
+            src="{{ url_for('static', filename=product.image_url) }}"
             alt="{{ product.name }}"
         >
 
@@ -18,35 +15,67 @@
 
     <div class="product-detail-info">
 
-        <h2>
-
-            {{ product.name }}
-
-        </h2>
+        <h2>{{ product.name }}</h2>
 
         <p class="detail-price">
-
-            S/{{ product.price }}
-
+            S/ {{ product.price }}
         </p>
 
         <p class="detail-description">
-
             {{ product.description }}
-
         </p>
 
-        <a
-            href="{{ url_for(
-                'add_to_cart',
-                product_id=product.id
-            ) }}"
-            class="btn-cart"
+        <!-- Stock -->
+        <p class="detail-stock">
+            <strong>Stock disponible:</strong> {{ product.stock }}
+        </p>
+
+        {% if product.stock > 0 %}
+
+        <!-- Comprar -->
+        <form
+            action="{{ url_for('buy', id=product.id) }}"
+            method="POST"
+            class="buy-form"
         >
 
-            Agregar al carrito
+            <label>Cantidad</label>
 
+            <input
+                type="number"
+                name="cantidad"
+                value="1"
+                min="1"
+                max="{{ product.stock }}"
+                required
+            >
+
+            <button type="submit" class="btn-buy">
+                Comprar ahora
+            </button>
+
+        </form>
+
+        <br>
+
+        <a
+            href="{{ url_for('add_to_cart', product_id=product.id) }}"
+            class="btn-cart"
+        >
+            Agregar al carrito
         </a>
+
+        {% else %}
+
+        <p style="color:red;font-weight:bold;">
+            ❌ Producto sin stock
+        </p>
+
+        <button class="btn-buy" disabled>
+            Comprar ahora
+        </button>
+
+        {% endif %}
 
     </div>
 
