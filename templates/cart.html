@@ -10,32 +10,44 @@
 
 <div class="cart-container">
 
+    {% if request.args.get('success') %}
+    <div class="success">
+        ✅ Compra realizada correctamente.
+    </div>
+    {% endif %}
+
+    {% if request.args.get('error') == 'pago' %}
+    <div class="error">
+        ❌ Pago inválido. Intente nuevamente.
+    </div>
+    {% endif %}
+
+    {% if request.args.get('error') == 'sin_stock' %}
+    <div class="error">
+        ❌ Uno de los productos ya no tiene stock disponible.
+    </div>
+    {% endif %}
+
     {% for item in cart %}
 
     <div class="cart-item">
 
         <img
-            src="{{ url_for(
-                'static',
-                filename=item.image_url
-            ) }}"
+            src="{{ url_for('static', filename=item.image_url) }}"
             alt="{{ item.name }}"
         >
 
-        <div>
+        <div class="cart-info">
 
             <h3>{{ item.name }}</h3>
 
             <p>
                 Precio:
-                <strong>S/{{ item.price }}</strong>
+                <strong>S/ {{ "%.2f"|format(item.price) }}</strong>
             </p>
 
             <a
-                href="{{ url_for(
-                    'remove_from_cart',
-                    index=loop.index0
-                ) }}"
+                href="{{ url_for('remove_from_cart', index=loop.index0) }}"
                 class="btn-danger"
             >
                 Eliminar
@@ -49,24 +61,31 @@
 
     <hr>
 
-    <h3>
-        Total: S/{{ total }}
+    <h3 class="total-price">
+        Total: S/ {{ "%.2f"|format(total) }}
     </h3>
 
-    <div style="margin-top:20px;">
+    <div class="cart-buttons">
 
         <a
-            href="{{ url_for('payment') }}"
+            href="{{ url_for('checkout') }}"
             class="btn-primary"
         >
-            Finalizar Compra
+            💳 Finalizar Compra
         </a>
 
         <a
             href="{{ url_for('clear_cart') }}"
             class="btn-danger"
         >
-            Vaciar Carrito
+            🗑 Vaciar Carrito
+        </a>
+
+        <a
+            href="{{ url_for('home') }}"
+            class="btn-secondary"
+        >
+            ← Seguir Comprando
         </a>
 
     </div>
@@ -75,16 +94,26 @@
 
 {% else %}
 
-<p>
-    El carrito está vacío.
-</p>
+<div class="simple-page">
 
-<a
-    href="{{ url_for('home') }}"
-    class="btn-primary"
->
-    Ir a la tienda
-</a>
+    <h3>
+        🛒 Tu carrito está vacío
+    </h3>
+
+    <p>
+        Agrega algunos productos para comenzar tu compra.
+    </p>
+
+    <br>
+
+    <a
+        href="{{ url_for('home') }}"
+        class="btn-primary"
+    >
+        Ir a la tienda
+    </a>
+
+</div>
 
 {% endif %}
 
