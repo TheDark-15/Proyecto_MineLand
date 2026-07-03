@@ -2,6 +2,7 @@
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -22,43 +23,67 @@
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     >
+
 </head>
 
 <body>
 
-    <header class="main-header">
+<header class="main-header">
 
-        <div class="logo">
-            <h1>MineLand Center</h1>
-        </div>
+    <div class="logo">
 
-        <nav class="navbar">
+        <h1>MineLand Center</h1>
 
-            <ul class="nav-links left-links">
-                <li>
-                    <a href="{{ url_for('home') }}">Inicio</a>
-                </li>
+        <p>Tu mundo Gaming comienza aquí</p>
 
-                <li>
-                    <a href="{{ url_for('about') }}">Nosotros</a>
-                </li>
+    </div>
 
-                <li>
-                    <a href="{{ url_for('contact') }}">Contacto</a>
-                </li>
+    <nav class="navbar">
 
-                <li>
-                    <a href="{{ url_for('cart_page') }}">Carrito</a>
-                </li>
-            </ul>
+        <!-- Menú izquierdo -->
+        <ul class="nav-links left-links">
 
-            <ul class="nav-links right-links">
-                <li>
-                    <a href="{{ url_for('login') }}">
-                        <i class="fa-solid fa-right-to-bracket"></i>
-                        Login
-                    </a>
-                </li>
+            <li>
+                <a href="{{ url_for('home') }}">
+                    <i class="fa-solid fa-house"></i>
+                    Inicio
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('about') }}">
+                    <i class="fa-solid fa-users"></i>
+                    Nosotros
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('contact') }}">
+                    <i class="fa-solid fa-envelope"></i>
+                    Contacto
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url_for('cart_page') }}">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    Carrito
+                </a>
+            </li>
+
+        </ul>
+
+        <!-- Menú derecho -->
+        <ul class="nav-links right-links">
+
+            <li>
+                <a href="{{ url_for('register_customer') }}">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Registrarse
+                </a>
+            </li>
+
+            {% if session.get('user') %}
 
                 <li>
                     <a href="{{ url_for('dashboard') }}">
@@ -70,44 +95,72 @@
                 <li>
                     <a href="{{ url_for('logout') }}">
                         <i class="fa-solid fa-right-from-bracket"></i>
-                        Logout
+                        Cerrar sesión
                     </a>
                 </li>
-            </ul>
 
-        </nav>
+            {% else %}
 
-    </header>
+                <li>
+                    <a href="{{ url_for('login') }}">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        Login Admin
+                    </a>
+                </li>
 
-    <section class="search-section">
+            {% endif %}
 
-        <form
-            action="{{ url_for('home') }}"
-            method="GET"
-            class="search-form"
+        </ul>
+
+    </nav>
+
+</header>
+
+<section class="search-section">
+
+    <form
+        action="{{ url_for('home') }}"
+        method="GET"
+        class="search-form"
+    >
+
+        <input
+            type="text"
+            name="search"
+            placeholder="Buscar videojuegos, consolas..."
         >
-            <input
-                type="text"
-                name="search"
-                placeholder="Buscar productos..."
-            >
 
-            <button type="submit">
-                Buscar
-            </button>
-        </form>
+        <button type="submit">
 
-    </section>
+            <i class="fa-solid fa-magnifying-glass"></i>
 
-    <main class="container">
-        {% block content %}
-        {% endblock %}
-    </main>
+            Buscar
 
-    <footer class="footer">
-        <p>© 2026 MineLand Center</p>
-        <p>Plataforma gaming desarrollada con Flask</p>
-    </footer>
+        </button>
+
+    </form>
+
+</section>
+
+<main class="container">
+
+    {% block content %}
+    {% endblock %}
+
+</main>
+
+<footer class="footer">
+
+    <h3>MineLand Center</h3>
+
+    <p>🎮 Tu tienda gamer de confianza.</p>
+
+    <p>© 2026 Todos los derechos reservados.</p>
+
+    <p>Desarrollado con Flask + SQLAlchemy.</p>
+
+</footer>
 
 </body>
+
 </html>
