@@ -11,7 +11,7 @@
         <input
             type="text"
             name="name"
-            placeholder="Nombre"
+            placeholder="Nombre del producto"
             required
         >
 
@@ -20,6 +20,14 @@
             step="0.01"
             name="price"
             placeholder="Precio"
+            required
+        >
+
+        <input
+            type="number"
+            name="stock"
+            placeholder="Stock disponible"
+            min="0"
             required
         >
 
@@ -36,8 +44,11 @@
             required
         >
 
-        <button type="submit" class="btn-primary">
-            Guardar
+        <button
+            type="submit"
+            class="btn-primary"
+        >
+            Guardar Producto
         </button>
 
     </form>
