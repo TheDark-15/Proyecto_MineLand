@@ -383,3 +383,298 @@ a:hover {
         text-align: center;
     }
 }
+/* =====================================================
+   MINE LAND CENTER - ACTUALIZACIÓN
+=====================================================*/
+
+/* PRODUCT DETAIL */
+
+.product-detail{
+    display:flex;
+    gap:40px;
+    flex-wrap:wrap;
+    margin:50px auto;
+    background:var(--card);
+    border-radius:15px;
+    padding:30px;
+    border:1px solid var(--border);
+    box-shadow:0 0 20px rgba(57,255,20,.08);
+}
+
+.product-detail-image{
+    flex:1;
+    min-width:320px;
+    text-align:center;
+}
+
+.product-detail-image img{
+    width:100%;
+    max-width:450px;
+    border-radius:15px;
+    transition:.35s;
+}
+
+.product-detail-image img:hover{
+    transform:scale(1.03);
+}
+
+.product-detail-info{
+    flex:1;
+    min-width:320px;
+}
+
+.product-detail-info h2{
+    color:var(--primary);
+    font-size:2.4rem;
+    margin-bottom:15px;
+}
+
+.detail-price{
+    color:var(--success);
+    font-size:2rem;
+    font-weight:bold;
+    margin:15px 0;
+}
+
+.detail-description{
+    color:var(--muted);
+    margin-bottom:25px;
+}
+
+.detail-stock{
+    margin:20px 0;
+    font-size:18px;
+}
+
+.product-detail hr{
+    border:1px solid var(--border);
+    margin:20px 0;
+}
+
+/* BOTONES */
+
+.buttons{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
+.btn-buy{
+    background:var(--primary);
+    color:#000;
+    padding:12px 25px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.btn-buy:hover{
+    background:var(--primary-dark);
+    transform:translateY(-2px);
+    box-shadow:0 0 15px var(--glow);
+}
+
+.buy-form{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    margin-top:20px;
+}
+
+.buy-form input{
+    width:120px;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background:#0f0f0f;
+    color:#fff;
+}
+
+/* CARRITO */
+
+.cart-container{
+    margin:40px auto;
+}
+
+.cart-item{
+    display:flex;
+    align-items:center;
+    gap:25px;
+    background:var(--card);
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+    border:1px solid var(--border);
+}
+
+.cart-item img{
+    width:150px;
+    height:150px;
+    object-fit:cover;
+    border-radius:12px;
+}
+
+.cart-info{
+    flex:1;
+}
+
+.cart-info h3{
+    margin-bottom:10px;
+    color:var(--primary);
+}
+
+.cart-buttons{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-top:30px;
+}
+
+.total-price{
+    color:var(--success);
+    font-size:30px;
+    margin-top:20px;
+}
+
+/* ALERTAS */
+
+.success{
+    background:#00c853;
+    color:#fff;
+    padding:15px;
+    border-radius:10px;
+    text-align:center;
+    margin-bottom:20px;
+    font-weight:bold;
+}
+
+.error{
+    background:#c62828;
+    color:#fff;
+    padding:15px;
+    border-radius:10px;
+    text-align:center;
+    margin-bottom:20px;
+    font-weight:bold;
+}
+
+/* CHECKOUT */
+
+.checkout-box{
+    max-width:650px;
+    margin:50px auto;
+    background:var(--card);
+    padding:30px;
+    border-radius:15px;
+    border:1px solid var(--border);
+}
+
+.checkout-box h2{
+    color:var(--primary);
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.checkout-box form{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.checkout-box input,
+.checkout-box select{
+    padding:15px;
+    border:none;
+    border-radius:8px;
+    background:#0f0f0f;
+    color:#fff;
+}
+
+/* SIMPLE PAGE */
+
+.simple-page{
+    max-width:900px;
+    margin:80px auto;
+    text-align:center;
+}
+
+.simple-page h2{
+    color:var(--primary);
+    margin-bottom:20px;
+}
+
+.simple-page p{
+    color:var(--muted);
+}
+
+/* DASHBOARD */
+
+.dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:20px;
+    margin:40px 0;
+}
+
+/* TABLA */
+
+.dashboard-table tr:nth-child(even){
+    background:#181818;
+}
+
+.dashboard-table tr:hover{
+    background:#202020;
+}
+
+/* SCROLL */
+
+::-webkit-scrollbar{
+    width:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:#111;
+}
+
+::-webkit-scrollbar-thumb{
+    background:var(--primary);
+    border-radius:10px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:var(--primary-dark);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+.product-detail{
+    flex-direction:column;
+}
+
+.buttons{
+    flex-direction:column;
+}
+
+.cart-item{
+    flex-direction:column;
+    text-align:center;
+}
+
+.cart-buttons{
+    flex-direction:column;
+}
+
+.product-detail-info h2{
+    font-size:2rem;
+}
+
+.detail-price{
+    font-size:1.7rem;
+}
