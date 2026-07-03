@@ -206,8 +206,9 @@ def register_customer():
 
         if existe:
             return render_template(
-                'register_customer.html',
-                error="El correo ya está registrado"
+                'register.html',
+                error="El correo ya está registrado",
+                page_title="Registro"
             )
 
         customer = Customer(
@@ -219,11 +220,15 @@ def register_customer():
         db.session.commit()
 
         return render_template(
-            'register_customer.html',
-            success="Cliente registrado correctamente"
+            'register.html',
+            success="Cliente registrado correctamente",
+            page_title="Registro"
         )
 
-    return render_template('register_customer.html')
+    return render_template(
+        'register.html',
+        page_title="Registro"
+    )
 @app.route('/logout')
 def logout():
 
