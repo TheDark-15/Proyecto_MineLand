@@ -14,51 +14,63 @@ from flask import (
 )
 
 from flask_sqlalchemy import SQLAlchemy
-
 import os
 
 app = Flask(__name__)
 
-app.secret_key = "mineland_secret_key"
+app.secret_key = os.environ.get("SECRET_KEY", "dev_key_change_me")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = (
-    'sqlite:///database.db'
-)
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
 class Product(db.Model):
 
-    id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
+    id = db.Column(db.Integer, primary_key=True)
 
-    name = db.Column(
-        db.String(100),
-        nullable=False
-    )
+    name = db.Column(db.String(100), nullable=False)
 
-    price = db.Column(
-        db.Float,
-        nullable=False
-    )
+    price = db.Column(db.Float, nullable=False)
 
-    description = db.Column(
-        db.Text,
-        nullable=False
-    )
+    description = db.Column(db.Text, nullable=False)
 
-    image_url = db.Column(
-        db.String(200),
-        nullable=False
-    )
+    image_url = db.Column(db.String(200), nullable=False)
+
+    # STOCK (CP08)
+    stock = db.Column(db.Integer, default=10)
+
+class Customer(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    name = db.Column(db.String(100), nullable=False)
+
+    email = db.Column(db.String(100), unique=True, nullable=False)
+
+class Purchase(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    customer_name = db.Column(db.String(100), nullable=False)
+
+    product_name = db.Column(db.String(100), nullable=False)
+
+    price = db.Column(db.Float, nullable=False)
 
 with app.app_context():
 
     db.create_all()
+
+    if Customer.query.count() == 0:
+
+        demo = Customer(
+            name="Cliente Demo",
+            email="demo@mineland.com"
+        )
+
+        db.session.add(demo)
+        db.session.commit()
 
     if Product.query.count() == 0:
 
@@ -67,47 +79,38 @@ with app.app_context():
             Product(
                 name="PlayStation 5",
                 price=2599.99,
-                description=(
-                    "Consola de nueva generación "
-                    "de Sony con SSD ultrarrápido."
-                ),
+                stock=8,
+                description="Consola de nueva generación de Sony con SSD ultrarrápido.",
                 image_url="images/ps5.jpg"
             ),
 
             Product(
                 name="Nintendo Switch 2",
                 price=2459.99,
-                description=(
-                    "Consola híbrida moderna "
-                    "con nuevas funciones online."
-                ),
+                stock=5,
+                description="Consola híbrida moderna con nuevas funciones online.",
                 image_url="images/switch2.jpg"
             ),
 
             Product(
                 name="Xbox Series X",
                 price=2199.99,
-                description=(
-                    "Potencia extrema gaming "
-                    "con resolución 4K."
-                ),
+                stock=6,
+                description="Potencia extrema gaming con resolución 4K.",
                 image_url="images/xbox.jpg"
             ),
 
-             Product(
+            Product(
                 name="PC Gamer Razer X",
                 price=2999.99,
-                description=(
-                    "Potente equipo gamer con 664 GB y 32 Ram"
-                    "con resolución 4K y tarjeta grafica incluida."
-                ),
+                stock=3,
+                description="Potente equipo gamer con 32 RAM y 4K.",
                 image_url="images/pcgamer.jpg"
             )
 
         ]
 
         db.session.add_all(sample_products)
-
         db.session.commit()
 
 USERNAME = "admin"
@@ -133,10 +136,6 @@ def home():
         products=products,
         page_title='Inicio'
     )
-
-# =====================================================
-# DETALLE PRODUCTO
-# =====================================================
 
 @app.route('/product/<int:product_id>')
 def product_detail(product_id):
@@ -178,20 +177,13 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        if (
-            username == USERNAME and
-            password == PASSWORD
-        ):
+        if username == USERNAME and password == PASSWORD:
 
             session['user'] = username
 
-            return redirect(
-                url_for('dashboard')
-            )
+            return redirect(url_for('dashboard'))
 
-        error = (
-            "Usuario o contraseña incorrectos"
-        )
+        error = "Usuario o contraseña incorrectos"
 
     return render_template(
         'login.html',
@@ -211,9 +203,7 @@ def dashboard():
 
     if 'user' not in session:
 
-        return redirect(
-            url_for('login')
-        )
+        return redirect(url_for('login'))
 
     products = Product.query.all()
 
@@ -223,62 +213,46 @@ def dashboard():
         page_title='Dashboard'
     )
 
-@app.route(
-    '/add_product',
-    methods=['GET', 'POST']
-)
+@app.route('/add_product', methods=['GET', 'POST'])
 def add_product():
 
     if 'user' not in session:
-
-        return redirect(
-            url_for('login')
-        )
+        return redirect(url_for('login'))
 
     if request.method == 'POST':
 
+        name = request.form.get('name')
+        price = request.form.get('price')
+        stock = request.form.get('stock')
+        description = request.form.get('description')
+        image = request.form.get('image_url')
+
+        if not name or not price or not stock or not description or not image:
+            return redirect(url_for('add_product'))
+
         new_product = Product(
-
-            name=request.form.get('name'),
-
-            price=float(
-                request.form.get('price')
-            ),
-
-            description=request.form.get(
-                'description'
-            ),
-
-            image_url=(
-                f"images/"
-                f"{request.form.get('image_url')}"
-            )
+            name=name,
+            price=float(price),
+            stock=int(stock),
+            description=description,
+            image_url=f"images/{image}"
         )
 
         db.session.add(new_product)
-
         db.session.commit()
 
-        return redirect(
-            url_for('dashboard')
-        )
+        return redirect(url_for('dashboard'))
 
     return render_template(
         'add_product.html',
         page_title='Agregar Producto'
     )
 
-@app.route(
-    '/edit_product/<int:product_id>',
-    methods=['GET', 'POST']
-)
+@app.route('/edit_product/<int:product_id>', methods=['GET', 'POST'])
 def edit_product(product_id):
 
     if 'user' not in session:
-
-        return redirect(
-            url_for('login')
-        )
+        return redirect(url_for('login'))
 
     product = Product.query.get(product_id)
 
@@ -287,43 +261,40 @@ def edit_product(product_id):
 
     if request.method == 'POST':
 
-        product.name = request.form.get(
-            'name'
-        )
+        name = request.form.get('name')
+        price = request.form.get('price')
+        stock = request.form.get('stock')
+        description = request.form.get('description')
+        image = request.form.get('image_url')
 
-        product.price = float(
-            request.form.get('price')
-        )
+        if not name or not price or not stock or not description or not image:
+            return redirect(url_for('edit_product', product_id=product_id))
 
-        product.description = request.form.get(
-            'description'
-        )
+        try:
+            product.name = name
+            product.price = float(price)
+            product.stock = int(stock)
+            product.description = description
+            product.image_url = f"images/{image}"
 
-        product.image_url = (
-            f"images/"
-            f"{request.form.get('image_url')}"
-        )
+        except ValueError:
+            return redirect(url_for('edit_product', product_id=product_id))
 
         db.session.commit()
 
-        return redirect(
-            url_for('dashboard')
-        )
+        return redirect(url_for('dashboard'))
 
     return render_template(
         'edit_product.html',
         product=product,
         page_title='Editar Producto'
     )
-
+    
 @app.route('/delete_product/<int:product_id>')
 def delete_product(product_id):
 
     if 'user' not in session:
-
-        return redirect(
-            url_for('login')
-        )
+        return redirect(url_for('login'))
 
     product = Product.query.get(product_id)
 
@@ -331,54 +302,48 @@ def delete_product(product_id):
         abort(404)
 
     db.session.delete(product)
-
     db.session.commit()
 
-    return redirect(
-        url_for('dashboard')
-    )
-
+    return redirect(url_for('dashboard'))
+    
 @app.route('/add_to_cart/<int:product_id>')
 def add_to_cart(product_id):
 
     product = Product.query.get(product_id)
 
     if product is None:
-        abort(404)
+        return redirect(url_for('cart_page', error="producto_no_existe"))
+
+    if product.stock < 1:
+        return redirect(url_for('cart_page', error="sin_stock"))
 
     if 'cart' not in session:
-
         session['cart'] = []
 
     session['cart'].append({
-
         "id": product.id,
         "name": product.name,
         "price": product.price,
         "image_url": product.image_url
-
     })
 
     session.modified = True
 
-    return redirect(
-        url_for('cart_page')
-    )
-
+    return redirect(url_for('cart_page'))
+    
 @app.route('/cart')
 def cart_page():
 
     cart = session.get('cart', [])
 
-    total = sum(
-        item['price']
-        for item in cart
-    )
+    total = sum(float(item['price']) for item in cart)
 
     return render_template(
         'cart.html',
         cart=cart,
         total=total,
+        error=request.args.get('error'),
+        success=request.args.get('success'),
         page_title='Carrito'
     )
 
@@ -388,27 +353,67 @@ def remove_from_cart(index):
     cart = session.get('cart', [])
 
     if 0 <= index < len(cart):
-
         cart.pop(index)
 
     session['cart'] = cart
-
     session.modified = True
 
-    return redirect(
-        url_for('cart_page')
-    )
+    return redirect(url_for('cart_page'))
+
 
 @app.route('/clear_cart')
 def clear_cart():
 
     session['cart'] = []
-
     session.modified = True
 
-    return redirect(
-        url_for('cart_page')
-    )
+    return redirect(url_for('cart_page'))
+
+
+@app.route('/checkout', methods=['POST'])
+def checkout():
+
+    cart = session.get('cart', [])
+
+    if len(cart) == 0:
+        return redirect(url_for('cart_page', error="carrito_vacio"))
+
+    payment = request.form.get('payment')
+
+    if payment != "123456":
+        return redirect(url_for('cart_page', error="pago"))
+
+    customer = Customer.query.first()
+
+    if customer is None:
+        return redirect(url_for('cart_page', error="no_customer"))
+
+    for item in cart:
+
+        product = Product.query.get(item['id'])
+
+        if product is None:
+            return redirect(url_for('cart_page', error="producto_no_existe"))
+
+        if product.stock <= 0:
+            return redirect(url_for('cart_page', error="sin_stock"))
+
+        product.stock -= 1
+
+        purchase = Purchase(
+            customer_name=customer.name,
+            product_name=product.name,
+            price=product.price
+        )
+
+        db.session.add(purchase)
+
+    db.session.commit()
+
+    session['cart'] = []
+    session.modified = True
+
+    return redirect(url_for('cart_page', success="1"))
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -420,11 +425,7 @@ def page_not_found(error):
 
 if __name__ == '__main__':
 
-    port = int(
-        os.environ.get("PORT", 5000)
-    )
-
-    app.run(
-        host='0.0.0.0',
-        port=port
-    )
+    port = int( os.environ.get("PORT", 5000) )
+    app.run( host='0.0.0.0',
+    port=port )
+    
