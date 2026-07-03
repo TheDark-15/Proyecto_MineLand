@@ -190,7 +190,40 @@ def login():
         error=error,
         page_title='Login'
     )
+    
+@app.route('/register_customer', methods=['GET', 'POST'])
+def register_customer():
 
+    if request.method == 'POST':
+
+        name = request.form.get('name')
+        email = request.form.get('email')
+
+        if not name or not email:
+            return redirect(url_for('register_customer'))
+
+        existe = Customer.query.filter_by(email=email).first()
+
+        if existe:
+            return render_template(
+                'register_customer.html',
+                error="El correo ya está registrado"
+            )
+
+        customer = Customer(
+            name=name,
+            email=email
+        )
+
+        db.session.add(customer)
+        db.session.commit()
+
+        return render_template(
+            'register_customer.html',
+            success="Cliente registrado correctamente"
+        )
+
+    return render_template('register_customer.html')
 @app.route('/logout')
 def logout():
 
