@@ -1,38 +1,63 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
 
-<div class="container">
+<div class="form-container fade-up">
 
     <h2>Registro de Usuario</h2>
 
-    <form method="POST">
+    {% if error %}
+    <div class="error">
+        {{ error }}
+    </div>
+    {% endif %}
 
-        <input
-            type="text"
-            name="username"
-            placeholder="Usuario"
-            required>
+    {% if success %}
+    <div class="success">
+        {{ success }}
+    </div>
+    {% endif %}
 
-        <input
-            type="password"
-            name="password"
-            placeholder="Contraseña"
-            required>
+    <form action="{{ url_for('register_customer') }}" method="POST">
 
-        <button type="submit">
-            Registrarse
-        </button>
+        <div class="form-group">
+
+            <label>Nombre</label>
+
+            <input
+                type="text"
+                name="name"
+                placeholder="Ingrese su nombre"
+                required
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Correo electrónico</label>
+
+            <input
+                type="email"
+                name="email"
+                placeholder="correo@ejemplo.com"
+                required
+            >
+
+        </div>
+
+        <div class="form-actions">
+
+            <button
+                type="submit"
+                class="btn-primary"
+            >
+                Registrarse
+            </button>
+
+        </div>
 
     </form>
-
-    {% with messages=get_flashed_messages() %}
-        {% for message in messages %}
-            <p style="color:green">
-                {{message}}
-            </p>
-        {% endfor %}
-    {% endwith %}
 
 </div>
 
