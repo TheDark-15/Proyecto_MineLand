@@ -14,7 +14,7 @@ from flask import (
 )
 
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 app = Flask(__name__)
@@ -69,7 +69,8 @@ with app.app_context():
 
         demo = Customer(
             name="Cliente Demo",
-            email="demo@mineland.com"
+            email="demo@mineland.com",
+            password=generate_password_hash("123456")
         )
 
         db.session.add(demo)
@@ -115,10 +116,7 @@ with app.app_context():
 
         db.session.add_all(sample_products)
         db.session.commit()
-
-USERNAME = "admin"
-PASSWORD = "1234"
-
+        
 @app.route('/')
 def home():
 
@@ -177,21 +175,54 @@ def login():
 
     if request.method == 'POST':
 
-        username = request.form.get('username')
-        password = request.form.get('password')
+        email = request.form.get('email', '').strip().lower()
+        password = request.form.get('password', '').strip()
 
-        if username == USERNAME and password == PASSWORD:
+        # Validar campos
+        if not email or not password:
 
-            session['user'] = username
+            error = "Debe ingresar el correo y la contraseña."
 
-            return redirect(url_for('dashboard'))
+            return render_template(
+                "login.html",
+                error=error,
+                page_title="Login"
+            )
 
-        error = "Usuario o contraseña incorrectos"
+        # ==========================
+        # LOGIN ADMIN
+        # ==========================
+        if email == "admin" and password == "1234":
+
+            session.clear()
+
+            session["user"] = "admin"
+            session["role"] = "admin"
+
+            return redirect(url_for("dashboard"))
+
+        # ==========================
+        # LOGIN CLIENTE
+        # ==========================
+        customer = Customer.query.filter_by(email=email).first()
+
+        if customer and check_password_hash(customer.password, password):
+
+            session.clear()
+
+            session["customer_id"] = customer.id
+            session["customer_name"] = customer.name
+            session["role"] = "customer"
+
+            return redirect(url_for("home"))
+
+        # Si las credenciales son incorrectas
+        error = "Correo o contraseña incorrectos."
 
     return render_template(
-        'login.html',
+        "login.html",
         error=error,
-        page_title='Login'
+        page_title="Login"
     )
     
 @app.route('/register_customer', methods=['GET', 'POST'])
@@ -259,30 +290,29 @@ def register_customer():
 @app.route('/logout')
 def logout():
 
-    session.pop('user', None)
+    session.clear()
 
     return redirect(url_for('home'))
 
 @app.route('/dashboard')
 def dashboard():
 
-    if 'user' not in session:
-
-        return redirect(url_for('login'))
+    if session.get("role") != "admin":
+        return redirect(url_for("login"))
 
     products = Product.query.all()
 
     return render_template(
-        'dashboard.html',
+        "dashboard.html",
         products=products,
-        page_title='Dashboard'
+        page_title="Dashboard"
     )
-
+    
 @app.route('/add_product', methods=['GET', 'POST'])
 def add_product():
 
-    if 'user' not in session:
-        return redirect(url_for('login'))
+    if session.get("role") != "admin":
+        return redirect(url_for("login"))
 
     if request.method == 'POST':
 
@@ -316,8 +346,8 @@ def add_product():
 @app.route('/edit_product/<int:product_id>', methods=['GET', 'POST'])
 def edit_product(product_id):
 
-    if 'user' not in session:
-        return redirect(url_for('login'))
+    if session.get("role") != "admin":
+        return redirect(url_for("login"))
 
     product = Product.query.get(product_id)
 
@@ -358,8 +388,8 @@ def edit_product(product_id):
 @app.route('/delete_product/<int:product_id>')
 def delete_product(product_id):
 
-    if 'user' not in session:
-        return redirect(url_for('login'))
+    if session.get("role") != "admin":
+        return redirect(url_for("login"))
 
     product = Product.query.get(product_id)
 
@@ -449,14 +479,23 @@ def checkout():
 
         payment = request.form.get('payment')
 
+        # Validar pago
         if payment != "123456":
             return redirect(url_for('cart_page', error="pago"))
 
-        customer = Customer.query.first()
+        # Verificar que el usuario haya iniciado sesión
+        customer_id = session.get("customer_id")
+
+        if customer_id is None:
+            return redirect(url_for("login"))
+
+        # Buscar cliente
+        customer = Customer.query.get(customer_id)
 
         if customer is None:
-            return redirect(url_for('cart_page', error="no_customer"))
+            return redirect(url_for("login"))
 
+        # Procesar productos del carrito
         for item in cart:
 
             product = Product.query.get(item['id'])
@@ -467,8 +506,10 @@ def checkout():
             if product.stock <= 0:
                 return redirect(url_for('cart_page', error="sin_stock"))
 
+            # Descontar stock
             product.stock -= 1
 
+            # Registrar compra
             purchase = Purchase(
                 customer_name=customer.name,
                 product_name=product.name,
@@ -477,8 +518,10 @@ def checkout():
 
             db.session.add(purchase)
 
+        # Guardar cambios
         db.session.commit()
 
+        # Vaciar carrito
         session['cart'] = []
         session.modified = True
 
@@ -499,11 +542,9 @@ def page_not_found(error):
         page_title='No encontrado'
     ), 404
 
-if __name__ == '__main__':
-
+if __name__ == "__main__":
     app.run(
-        host='0.0.0.0',
-        port=5000,
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000)),
         debug=True
     )
-    
