@@ -192,7 +192,7 @@ def login():
         # ==========================
         # LOGIN ADMIN
         # ==========================
-        if email == "admin" and password == "1234":
+        if email == "admin@mineland.com" and password == "1234":
 
             session.clear()
 
