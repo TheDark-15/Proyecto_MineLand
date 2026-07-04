@@ -14,6 +14,7 @@ from flask import (
 )
 
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash
 import os
 
 app = Flask(__name__)
@@ -198,24 +199,48 @@ def register_customer():
 
     if request.method == 'POST':
 
-        name = request.form.get('name')
-        email = request.form.get('email')
+        name = request.form.get('name', '').strip()
+        email = request.form.get('email', '').strip().lower()
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
 
-        if not name or not email:
-            return redirect(url_for('register_customer'))
+        # Validar campos vacíos
+        if not name or not email or not password or not confirm_password:
 
-        existe = Customer.query.filter_by(email=email).first()
-
-        if existe:
             return render_template(
                 'register.html',
-                error="El correo ya está registrado",
+                error="Todos los campos son obligatorios.",
                 page_title="Registro"
             )
 
+        # Validar contraseña
+        if password != confirm_password:
+
+            return render_template(
+                'register.html',
+                error="Las contraseñas no coinciden.",
+                page_title="Registro"
+            )
+
+        # Verificar si el correo ya existe
+        existe = Customer.query.filter_by(email=email).first()
+
+        if existe:
+
+            return render_template(
+                'register.html',
+                error="El correo electrónico ya está registrado.",
+                page_title="Registro"
+            )
+
+        # Encriptar contraseña
+        password_hash = generate_password_hash(password)
+
+        # Crear cliente
         customer = Customer(
             name=name,
-            email=email
+            email=email,
+            password=password_hash
         )
 
         db.session.add(customer)
@@ -223,7 +248,7 @@ def register_customer():
 
         return render_template(
             'register.html',
-            success="Cliente registrado correctamente",
+            success="¡Registro realizado correctamente! Ya puedes iniciar sesión.",
             page_title="Registro"
         )
 
