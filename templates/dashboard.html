@@ -4,16 +4,18 @@
 
 <div class="dashboard-header">
 
-    <h2>Dashboard Admin</h2>
+    <h2>🛠 Dashboard del Administrador</h2>
 
     <a
         href="{{ url_for('add_product') }}"
         class="btn-primary"
     >
-        Agregar Producto
+        ➕ Agregar Producto
     </a>
 
 </div>
+
+{% if products %}
 
 <div class="product-grid">
 
@@ -22,37 +24,56 @@
     <div class="product-card">
 
         <img
-            src="{{ url_for(
-                'static',
-                filename=product.image_url
-            ) }}"
+            src="{{ url_for('static', filename=product.image_url) }}"
+            alt="{{ product.name }}"
         >
 
         <div class="product-info">
 
             <h3>{{ product.name }}</h3>
 
-            <p>S/{{ product.price }}</p>
+            <p>
+                <strong>Precio:</strong>
+                S/ {{ "%.2f"|format(product.price) }}
+            </p>
 
-            <a
-                href="{{ url_for(
-                    'edit_product',
-                    product_id=product.id
-                ) }}"
-                class="btn-secondary"
-            >
-                Editar
-            </a>
+            <p>
+                <strong>Stock:</strong>
 
-            <a
-                href="{{ url_for(
-                    'delete_product',
-                    product_id=product.id
-                ) }}"
-                class="btn-danger"
-            >
-                Eliminar
-            </a>
+                {% if product.stock > 0 %}
+
+                    <span style="color:#00ff99;">
+                        {{ product.stock }} unidades
+                    </span>
+
+                {% else %}
+
+                    <span style="color:#ff4d4d;">
+                        Agotado
+                    </span>
+
+                {% endif %}
+
+            </p>
+
+            <div style="margin-top:15px;">
+
+                <a
+                    href="{{ url_for('edit_product', product_id=product.id) }}"
+                    class="btn-secondary"
+                >
+                    ✏ Editar
+                </a>
+
+                <a
+                    href="{{ url_for('delete_product', product_id=product.id) }}"
+                    class="btn-danger"
+                    onclick="return confirm('¿Eliminar este producto?')"
+                >
+                    🗑 Eliminar
+                </a>
+
+            </div>
 
         </div>
 
@@ -61,5 +82,22 @@
     {% endfor %}
 
 </div>
+
+{% else %}
+
+<div class="simple-page">
+
+    <h3>No hay productos registrados.</h3>
+
+    <a
+        href="{{ url_for('add_product') }}"
+        class="btn-primary"
+    >
+        Agregar el primer producto
+    </a>
+
+</div>
+
+{% endif %}
 
 {% endblock %}
