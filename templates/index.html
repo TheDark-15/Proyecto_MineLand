@@ -2,15 +2,15 @@
 
 {% block content %}
 
-<!-- HERO -->
-
 <section class="hero">
 
     <div class="hero-content">
 
-        <h2>
-            Bienvenido a MineLand Center
-        </h2>
+        {% if session.get("customer_name") %}
+            <h2>¡Bienvenido {{ session.get("customer_name") }}!</h2>
+        {% else %}
+            <h2>Bienvenido a MineLand Center</h2>
+        {% endif %}
 
         <p>
             Consolas, hardware gaming y tecnología extrema.
@@ -24,14 +24,10 @@
 
 </section>
 
-<!-- PRODUCTOS -->
-
 <section id="products">
 
     <h2 class="section-title">
-
         Productos Destacados
-
     </h2>
 
     <div class="product-grid">
@@ -41,10 +37,7 @@
         <div class="product-card">
 
             <img
-                src="{{ url_for(
-                    'static',
-                    filename=product.image_url
-                ) }}"
+                src="{{ url_for('static', filename=product.image_url) }}"
                 alt="{{ product.name }}"
             >
 
@@ -53,16 +46,16 @@
                 <h3>{{ product.name }}</h3>
 
                 <p class="price">
+                    S/{{ "%.2f"|format(product.price) }}
+                </p>
 
-                    S/{{ product.price }}
-
+                <p>
+                    Stock:
+                    <strong>{{ product.stock }}</strong>
                 </p>
 
                 <a
-                    href="{{ url_for(
-                        'product_detail',
-                        product_id=product.id
-                    ) }}"
+                    href="{{ url_for('product_detail', product_id=product.id) }}"
                     class="btn-secondary"
                 >
                     Ver Producto
