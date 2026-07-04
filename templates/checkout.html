@@ -4,29 +4,49 @@
 
 <div class="checkout-box">
 
-<h2>Finalizar Compra</h2>
+    <h2>💳 Finalizar Compra</h2>
 
-<h3>Total: S/ {{ "%.2f"|format(total) }}</h3>
+    <p>
+        Cliente:
+        <strong>{{ session.get("customer_name") }}</strong>
+    </p>
 
-<form method="POST">
+    <hr>
 
-<label>Código de pago</label>
+    <h3>
+        Total a pagar:
+        <span style="color:#00ff99;">
+            S/ {{ "%.2f"|format(total) }}
+        </span>
+    </h3>
 
-<input
-type="password"
-name="payment"
-placeholder="Ingrese 123456"
-required
->
+    <br>
 
-<button
-type="submit"
-class="btn-primary">
-Confirmar Compra
-</button>
+    <form method="POST">
 
-</form>
+        <label for="payment">
+            Código de pago
+        </label>
 
-</div>
+        <input
+            type="password"
+            id="payment"
+            name="payment"
+            placeholder="Ingrese 123456"
+            required
+        >
 
-{% endblock %}
+        <small>
+            (Para la demostración utilice <strong>123456</strong>)
+        </small>
+
+        <br><br>
+
+        <button
+            type="submit"
+            class="btn-primary"
+        >
+            ✅ Confirmar Compra
+        </button>
+
+        <
