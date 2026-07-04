@@ -51,31 +51,42 @@
 
         {% if product.stock > 0 %}
 
-        <div class="buttons">
+            {% if session.get("customer_id") %}
 
-            <a
-                href="{{ url_for('add_to_cart', product_id=product.id) }}"
-                class="btn-cart"
-            >
-                🛒 Agregar al carrito
-            </a>
+                <div class="buttons">
 
-            <a
-                href="{{ url_for('cart_page') }}"
-                class="btn-primary"
-            >
-                Finalizar compra
-            </a>
+                    <a
+                        href="{{ url_for('add_to_cart', product_id=product.id) }}"
+                        class="btn-cart"
+                    >
+                        🛒 Agregar al carrito
+                    </a>
 
-        </div>
+                    <a
+                        href="{{ url_for('cart_page') }}"
+                        class="btn-primary"
+                    >
+                        Ver carrito
+                    </a>
+
+                </div>
+
+            {% else %}
+
+                <a
+                    href="{{ url_for('login') }}"
+                    class="btn-primary"
+                >
+                    🔐 Inicia sesión para comprar
+                </a>
+
+            {% endif %}
 
         {% else %}
 
-        <button class="btn-danger" disabled>
-
-            ❌ Producto sin stock
-
-        </button>
+            <button class="btn-danger" disabled>
+                ❌ Producto sin stock
+            </button>
 
         {% endif %}
 
