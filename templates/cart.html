@@ -28,6 +28,24 @@
     </div>
     {% endif %}
 
+    {% if request.args.get('error') == 'carrito_vacio' %}
+    <div class="error">
+        ❌ El carrito está vacío.
+    </div>
+    {% endif %}
+
+    {% if request.args.get('error') == 'producto_no_existe' %}
+    <div class="error">
+        ❌ Uno de los productos ya no existe.
+    </div>
+    {% endif %}
+
+    {% if request.args.get('error') == 'no_customer' %}
+    <div class="error">
+        ❌ Debes iniciar sesión para finalizar la compra.
+    </div>
+    {% endif %}
+
     {% for item in cart %}
 
     <div class="cart-item">
@@ -67,12 +85,25 @@
 
     <div class="cart-buttons">
 
-        <a
-            href="{{ url_for('checkout') }}"
-            class="btn-primary"
-        >
-            💳 Finalizar Compra
-        </a>
+        {% if session.get("customer_id") %}
+
+            <a
+                href="{{ url_for('checkout') }}"
+                class="btn-primary"
+            >
+                💳 Finalizar Compra
+            </a>
+
+        {% else %}
+
+            <a
+                href="{{ url_for('login') }}"
+                class="btn-primary"
+            >
+                🔐 Iniciar sesión para comprar
+            </a>
+
+        {% endif %}
 
         <a
             href="{{ url_for('clear_cart') }}"
