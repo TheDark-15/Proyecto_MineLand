@@ -4,71 +4,93 @@
 
 <div class="form-container">
 
-    <h2>Editar Producto</h2>
+    <h2>✏ Editar Producto</h2>
 
-    <form method="POST" class="edit-form">
+    <form method="POST">
 
-        <div class="form-group">
-            <label>Nombre del producto</label>
-            <input
-                type="text"
-                name="name"
-                value="{{ product.name }}"
-                required
-            >
-        </div>
+        <label for="name">
+            Nombre del producto
+        </label>
 
-        <div class="form-group">
-            <label>Precio (S/)</label>
-            <input
-                type="number"
-                step="0.01"
-                name="price"
-                value="{{ product.price }}"
-                required
-            >
-        </div>
+        <input
+            type="text"
+            id="name"
+            name="name"
+            value="{{ product.name }}"
+            maxlength="100"
+            required
+        >
 
-        <div class="form-group">
-            <label>Stock disponible</label>
-            <input
-                type="number"
-                name="stock"
-                value="{{ product.stock }}"
-                min="0"
-                required
-            >
-        </div>
+        <label for="price">
+            Precio (S/)
+        </label>
 
-        <div class="form-group full">
-            <label>Descripción</label>
-            <textarea
-                name="description"
-                rows="5"
-                required>{{ product.description }}</textarea>
-        </div>
+        <input
+            type="number"
+            id="price"
+            name="price"
+            value="{{ product.price }}"
+            step="0.01"
+            min="0"
+            required
+        >
 
-        <div class="form-group">
-            <label>Nombre de la imagen</label>
-            <input
-                type="text"
-                name="image_url"
-                value="{{ product.image_url.replace('images/', '') }}"
-                required
-            >
-        </div>
+        <label for="stock">
+            Stock disponible
+        </label>
 
-        <div class="form-buttons">
+        <input
+            type="number"
+            id="stock"
+            name="stock"
+            value="{{ product.stock }}"
+            min="0"
+            required
+        >
 
-            <button type="submit" class="btn-primary">
-                💾 Guardar Cambios
-            </button>
+        <label for="description">
+            Descripción
+        </label>
 
-            <a href="{{ url_for('dashboard') }}" class="btn-secondary">
-                ← Cancelar
-            </a>
+        <textarea
+            id="description"
+            name="description"
+            rows="5"
+            required
+        >{{ product.description }}</textarea>
 
-        </div>
+        <label for="image_url">
+            Nombre de la imagen
+        </label>
+
+        <input
+            type="text"
+            id="image_url"
+            name="image_url"
+            value="{{ product.image_url.replace('images/', '') }}"
+            required
+        >
+
+        <small>
+            La imagen debe existir dentro de
+            <strong>static/images/</strong>
+        </small>
+
+        <br><br>
+
+        <button
+            type="submit"
+            class="btn-primary"
+        >
+            💾 Guardar Cambios
+        </button>
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="btn-secondary"
+        >
+            ← Cancelar
+        </a>
 
     </form>
 
